@@ -116,7 +116,7 @@ L'infrastruttura poggia su container Docker (Laravel Sail):
 - MySQL 8.0.32
 
 L'autenticazione è gestita tramite Laravel Sanctum (https://github.com/laravel/sanctum) che genera un token revocabile
-composto da una stringa opaca.
+composto da una stringa opaca. Le credenziali dell'utente risedono nella tabella `users` di MySQL con password sottoposta a hashing tramite `bcrypt`.
 
 La pagina web che effettua login e renderizza in forma tabellare i dati ricevuti è una SPA React che richiama
 direttamente le API esposte.
@@ -149,7 +149,7 @@ Dentro il container:
 php artisan migrate
 ``` 
 
-Nella configurazione base, tanto le API esposte quanto la pagina web pubblicata sono accessibili sulla radice http://localhost
+Nella configurazione base, tanto le API esposte quanto la pagina web pubblicata sono accessibili sulla radice http://localhost tramite esposizione diretta sulla porta 80 da parte del container principale.
 
 ## Test
 

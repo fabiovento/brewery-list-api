@@ -1,0 +1,148 @@
+<h2 id="presentazione">Presentazione</h2>
+<p>Questo progetto si compone primariamente di un sistema API (che fa da proxy verso le API pubbliche esposte da <a href="https://www.openbrewerydb.org/">https://www.openbrewerydb.org/</a>), composto dai seguenti endpoint:</p>
+<ul>
+    <li><code>/api/login</code><ul>
+        <li>Metodo: <code>POST</code></li>
+        <li>Funzione: tramite Laravel Sanctum, i dati trasmessi dall&#39;utente e, in caso positivo, restituisce un token univoco per le successive richieste.</li>
+        <li>Payload della richiesta:<pre><code>  {
+     <span class="hljs-attr">"email"</span>: <span class="hljs-string">"..."</span>,
+     <span class="hljs-attr">"password"</span>: <span class="hljs-string">"..."</span>
+  }
+</code></pre></li>
+        <li>Payload esito negativo (JSON malformato): codice HTTP 422.<pre><code>  {
+     <span class="hljs-attr">"status"</span>: <span class="hljs-string">"error"</span>,
+     <span class="hljs-attr">"code"</span>: <span class="hljs-number">422</span>,
+     <span class="hljs-attr">"errors"</span>: {
+         <span class="hljs-attr">"email"</span>: [
+             <span class="hljs-string">"The email field is required."</span>
+         ],
+         <span class="hljs-attr">"password"</span>: [
+             <span class="hljs-string">"The password field is required."</span>
+         ]
+     }
+  }
+</code></pre></li>
+        <li>Payload esito negativo (dati di autenticazione errati): codice HTTP 401.<pre><code>  {
+     <span class="hljs-attr">"status"</span>: <span class="hljs-string">"error"</span>,
+     <span class="hljs-attr">"code"</span>: <span class="hljs-number">401</span>,
+     <span class="hljs-attr">"errors"</span>: <span class="hljs-string">"These credentials do not match our records."</span>
+  }
+</code></pre></li>
+        <li>Payload esito positivo: codice HTTP 200.<pre><code>  {
+     <span class="hljs-attr">"status"</span>: <span class="hljs-string">"ok"</span>,
+     <span class="hljs-attr">"access_token"</span>: <span class="hljs-string">"&lt;token&gt;"</span>,
+     <span class="hljs-attr">"token_type"</span>: <span class="hljs-string">"Bearer"</span>
+  }
+</code></pre></li>
+    </ul>
+    </li>
+    <li><code>/api/list</code><ul>
+        <li>Metodo: <code>GET</code></li>
+        <li>Funzione: fornisce una &quot;pagina&quot; dell&#39;elenco breweries.</li>
+        <li>Parametri:<ul>
+            <li><code>page</code>. Opzionale. Determina a quale &quot;pagina&quot; dell&#39;elenco breweries si desidera accedere. Se non specificato viene assunto pari a 1.</li>
+        </ul>
+        </li>
+        <li>Header della richiesta:<pre><code><span class="hljs-symbol"> Authorization:</span> Bearer <span class="hljs-params">&lt;token&gt;</span>
+</code></pre></li>
+        <li>Payload esito positivo: codice HTTP 200.<pre><code> {
+    <span class="hljs-string">"status"</span>: <span class="hljs-string">"ok"</span>,
+    <span class="hljs-string">"data"</span>: [
+         {
+            <span class="hljs-string">"id"</span>: <span class="hljs-string">"4a09f017-db8f-42e1-a8ec-a0cd81c28761"</span>,
+            <span class="hljs-string">"name"</span>: <span class="hljs-string">"1940's Brewing Company"</span>,
+            <span class="hljs-string">"brewery_type"</span>: <span class="hljs-string">"micro"</span>,
+             ...
+</code></pre></li>
+        <li>Payload esito negativo (token assente o errato): codice HTTP 401.<pre><code> {
+    <span class="hljs-attr">"status"</span>: <span class="hljs-string">"error"</span>,
+    <span class="hljs-attr">"code"</span>: <span class="hljs-number">401</span>,
+    <span class="hljs-attr">"errors"</span>: <span class="hljs-string">"Unauthenticated."</span>
+ }
+</code></pre></li>
+    </ul>
+    </li>
+    <li><code>/api/logout</code><ul>
+        <li>Metodo: <code>GET</code></li>
+        <li>Funzione: revoca il token univoco.</li>
+        <li>Header della richiesta:<pre><code><span class="hljs-symbol">  Authorization:</span> Bearer <span class="hljs-params">&lt;token&gt;</span>
+</code></pre></li>
+        <li>Payload esito positivo: codice HTTP 200.<pre><code>  {
+     <span class="hljs-attr">"status"</span>: <span class="hljs-string">"ok"</span>
+  }
+</code></pre></li>
+        <li>Payload esito negativo (token assente o errato): codice HTTP 401.<pre><code>  {
+     <span class="hljs-attr">"status"</span>: <span class="hljs-string">"error"</span>,
+     <span class="hljs-attr">"code"</span>: <span class="hljs-number">401</span>,
+     <span class="hljs-attr">"errors"</span>: <span class="hljs-string">"Unauthenticated."</span>
+  }
+</code></pre></li>
+    </ul>
+    </li>
+</ul>
+<p>È presente anche una pagina SPA, accessibile via browser su <code>/</code>, il cui flusso è il seguente:</p>
+<ul>
+    <li>Appare inizialmente un form di login (e-mail, password) che, se inviato, effettua un tentativo di autenticazione sull&#39;endpoint <code>/api/login</code>.<ul>
+        <li>Se le credenziali inserite non sono corrette, visualizza un messaggio di errore.</li>
+        <li>Altrimenti viene richiamato, tramite token ottenuto, l&#39;endpoint <code>/api/list</code> per ottenere la prima &quot;pagina&quot; delle breweries. L&#39;output di tale endpoint viene renderizzato in forma tabellare con paginatore.<ul>
+            <li>Se l&#39;utente seleziona un elemento del paginatore, viene richiamato lo stesso endpoint <code>/api/list</code>, passando però il parametro <code>page=n</code> per ottenere l&#39;n-esima &quot;pagina&quot; delle breweries, che viene renderizzata a sua volta in forma tabellare.</li>
+            <li>Se l&#39;utente seleziona il bottone &quot;Logout&quot; viene richiamato l&#39;endpoint <code>/api/logout</code> per la revoca del token di autenticazione, e l&#39;applicazione torna al form di login.</li>
+        </ul>
+        </li>
+    </ul>
+    </li>
+</ul>
+<p>Dati utente per login valido:</p>
+<pre><code><span class="hljs-attribute">E-mail</span>: root<span class="hljs-variable">@root</span>.com
+<span class="hljs-attribute">Password</span>: password
+</code></pre><p>Sono inclusi, nella directory <code>api_requests</code>, export delle request alle tre API, nei formati <code>Insomnia (.yaml)</code> e <code>HAR</code>.</p>
+<h2 id="infrastruttura">Infrastruttura</h2>
+<p>L&#39;infrastruttura poggia su container Docker (Laravel Sail):</p>
+<ul>
+    <li>Laravel 12.17.0</li>
+    <li>MySQL 8.0.32</li>
+</ul>
+<p>L&#39;autenticazione è gestita tramite Laravel Sanctum (<a href="https://github.com/laravel/sanctum">https://github.com/laravel/sanctum</a>) che genera un token revocabile
+    composto da una stringa opaca. Le credenziali dell&#39;utente risedono nella tabella <code>users</code> di MySQL con password sottoposta a hashing tramite <code>bcrypt</code>.</p>
+<p>La pagina web che effettua login e renderizza in forma tabellare i dati ricevuti è una SPA React che richiama
+    direttamente le API esposte.</p>
+<h2 id="pattern">Pattern</h2>
+<p>Il codice è stato steseo tenendo conto di pattern, che ne garantiscono la manutenibilità e riutilizzabilità:</p>
+<ul>
+    <li>Model View Controller</li>
+    <li>S.O.L.I.D.</li>
+    <li>Service Pattern</li>
+    <li>Dependency Injection Pattern</li>
+    <li>Exception Handler pattern</li>
+</ul>
+<h2 id="deploy">Deploy</h2>
+<p>Istuzioni per il deploy su ambiente locale:</p>
+<pre><code>git clone git@github<span class="hljs-selector-class">.com</span>:fabiovento/brewery-list<span class="hljs-selector-class">.git</span>
+cd brewery-list-api
+cp <span class="hljs-selector-class">.env</span><span class="hljs-selector-class">.example</span> <span class="hljs-selector-class">.env</span>
+composer install
+./vendor/bin/sail up --build
+sudo docker exec -it brewery-list-api-laravel<span class="hljs-selector-class">.test-1</span> bash
+</code></pre><p>Dentro il container:</p>
+<pre><code><span class="hljs-attribute">php artisan migrate</span>
+</code></pre><p>Nella configurazione base, tanto le API esposte quanto la pagina web pubblicata sono accessibili sulla radice <a href="http://localhost">http://localhost</a> tramite esposizione diretta sulla porta 80 da parte del container principale.</p>
+<h2 id="test">Test</h2>
+<p>Sono presenti tre test incentrati sull&#39;API di login:</p>
+<ul>
+    <li>Unitario (<code>tests\Unit\AuthUnitTest</code>)</li>
+</ul>
+<p>Testa internamente la routine di validazione connessa alla API di login, senza richiamarne l&#39;endpoint. Istanzia
+    AuthController e fa un mock di AuthService.</p>
+<ul>
+    <li>Funzionale (<code>tests\Unit\AuthFeatureTest</code>)</li>
+</ul>
+<p>Testa l&#39;effettiva funzionalità della API di login, richiamando esternamente il suo endpoint. Fa ancora mock di
+    AuthService.</p>
+<ul>
+    <li>Integrazione (<code>tests\Unit\AuthIntegrationTest</code>)</li>
+</ul>
+<p>Testa la funzionalità della API di login e la sua integrazione con il vero servizio AuthService e con l&#39;API di elenco
+    birrerie (al cui endpoint trasmette il token ricevuto).</p>
+<p>Per eseguire tali test, è sufficiente dare il seguente comando dentro il container principale:</p>
+<pre><code>php artisan <span class="hljs-built_in">test</span>
+</code></pre>
