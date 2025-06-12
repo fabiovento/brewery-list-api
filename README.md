@@ -121,17 +121,26 @@ composto da una stringa opaca.
 La pagina web che effettua login e renderizza in forma tabellare i dati ricevuti è una SPA React che richiama
 direttamente le API esposte.
 
+## Pattern
+
+Il codice è stato steseo tenendo conto di pattern, che ne garantiscono la manutenibilità e riutilizzabilità:
+- Model View Controller
+- S.O.L.I.D.
+- Service Pattern
+- Dependency Injection Pattern
+- Exception Handler pattern
+
 ## Deploy
 
 Istuzioni per il deploy su ambiente locale:
 
 ```
-mkdir laravel
-git clone git@github.com:fabiovento/brewery-list.git .
+git clone git@github.com:fabiovento/brewery-list.git
+cd brewery-list-api
 cp .env.example .env
 composer install
 ./vendor/bin/sail up --build
-sudo docker exec -it laravel-laravel.test-1 bash
+sudo docker exec -it brewery-list-api-laravel.test-1 bash
 ```
 
 Dentro il container:
