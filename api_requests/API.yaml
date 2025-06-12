@@ -1,0 +1,139 @@
+type: collection.insomnia.rest/5.0
+name: Brewery API
+meta:
+  id: wrk_6cdf491ccdbc41dd88c25ee82bf2123d
+  created: 1749564938573
+  modified: 1749734022167
+  description: ""
+collection:
+  - url: localhost:80/api/login
+    name: Login
+    meta:
+      id: req_86d52d95b4fd480da8b4fb00dc780460
+      created: 1749564938647
+      modified: 1749718631312
+      isPrivate: false
+      description: ""
+      sortKey: -1749564938647
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+            "email": "root@root.com",
+            "password": "password"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.2.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: localhost/api/logout
+    name: Logout
+    meta:
+      id: req_97705d6143564cd7bd5f473b5ab1a3fa
+      created: 1749566640236
+      modified: 1749733936932
+      isPrivate: false
+      description: ""
+      sortKey: -1749564938597
+    method: POST
+    body:
+      mimeType: application/json
+      text: ""
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_504f128ef542473b8124403629463047
+      - name: User-Agent
+        value: insomnia/11.2.0
+        id: pair_af99f3ca507f495b8d9b042def3e34cf
+      - id: pair_018740a71d1f450cbd26e095e5cdc43b
+        name: Authorization
+        value: Bearer 2|ymjgDeya9hJ5GODozYQuEVAKJvmI5YsPglx1JbuS01740cf4
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: localhost/api/list?page=2
+    name: List
+    meta:
+      id: req_a8fbdbe2c8fc4f66876182af281fe6d8
+      created: 1749598585808
+      modified: 1749733928976
+      isPrivate: false
+      description: ""
+      sortKey: -1749564938622
+    method: GET
+    body:
+      mimeType: application/json
+      text: ""
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_504f128ef542473b8124403629463047
+      - name: User-Agent
+        value: insomnia/11.2.0
+        id: pair_af99f3ca507f495b8d9b042def3e34cf
+      - id: pair_018740a71d1f450cbd26e095e5cdc43b
+        name: Authorization
+        value: Bearer 2|ymjgDeya9hJ5GODozYQuEVAKJvmI5YsPglx1JbuS01740cf4
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_9fa767de01bf31125b9c79f5784bdc96fca3ed65
+    created: 1749564938593
+    modified: 1749707714267
+  cookies:
+    - key: XSRF-TOKEN
+      value: eyJpdiI6Im1nci9BSEFSelpyWERDd3EwSXdaN0E9PSIsInZhbHVlIjoiODZSTXJTMWxIaTJ3bmU2dTZobEM2N1VkQ0RTc1NkSDB0aGFBZmJJUiswUDBSeWUwZGFWdGY4MVJzME4yNFFTaFNKaFZpTWFtQ2xTSHUyNVlkVEoySEJTbUlDd0wrbURYVy9ybndUMTl2M1loenVhMi91NzV5N242SmJRdUEySFIiLCJtYWMiOiI4NWE5NDQ5YjVmZTQzOWQ4ZWI2NjQ1MjU1YTA5MjMwMGJmOTRiYmE1OTY3YzFlZDU5ZWY5MjgwZDE5MDgwY2E0IiwidGFnIjoiIn0%3D
+      maxAge: 7200
+      domain: localhost
+      path: /
+      hostOnly: false
+      creation: 2025-06-10T14:44:10.609Z
+      lastAccessed: 2025-06-12T05:45:00.884Z
+      sameSite: lax
+      id: 220d0609-dd11-42ed-81e5-a69c60a88ef2
+    - key: laravel_session
+      value: eyJpdiI6IldxSzRsZ3FCMmZJcWZoWXpGU1BpbkE9PSIsInZhbHVlIjoib3pzOG1NWmMxYUhQNXFHMUZ6Q1FzeUNMYmJ0Z2NKTmpiRHJRVmQwa2xvMVo2QjlYZzc0MmhaT1JjQkN3RTdFbzRTZ2ZBa0NhME1BSlAxR3lYVDk4eGdjWk5qV0d2YkZCeUNJYlhLRzc2VEtnR2FqYVduamt5Zjc3VjBtdjdabzQiLCJtYWMiOiIwZTNkODY5M2M2ZjliZTlhZjlhMWU0ZjA0NWQ3OWViNjEzNjM2ZTE0MmQ3MzZiMjJlYTVjMmE4ZWU2MmJlYWU0IiwidGFnIjoiIn0%3D
+      maxAge: 7200
+      domain: localhost
+      path: /
+      httpOnly: true
+      hostOnly: false
+      creation: 2025-06-10T14:44:10.613Z
+      lastAccessed: 2025-06-12T05:55:14.267Z
+      sameSite: lax
+      id: 18278bc2-b3d3-40c7-a3e7-87b987fb10ed
+environments:
+  name: Base Environment
+  meta:
+    id: env_9fa767de01bf31125b9c79f5784bdc96fca3ed65
+    created: 1749564938590
+    modified: 1749564938590
+    isPrivate: false
