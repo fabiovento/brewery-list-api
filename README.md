@@ -44,7 +44,7 @@ Questo progetto si compone primariamente di un sistema API (che fa da proxy vers
   ```
 - `/api/list`
    - Metodo: `GET`
-   - Funzione: fornisce una "pagina" dell'elenco breweries.
+   - Funzione: fornisce una "pagina" dell'elenco breweries, interpellando a sua volta l'endpoint API pubblico https://api.openbrewerydb.org/v1/breweries e restituendone l'output.
    - Parametri:
      - `page`. Opzionale. Determina a quale "pagina" dell'elenco breweries si desidera accedere. Se non specificato viene assunto pari a 1.
    - Header della richiesta:

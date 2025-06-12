@@ -38,7 +38,7 @@
     </li>
     <li><code>/api/list</code><ul>
         <li>Metodo: <code>GET</code></li>
-        <li>Funzione: fornisce una &quot;pagina&quot; dell&#39;elenco breweries.</li>
+        <li>Funzione: fornisce una &quot;pagina&quot; dell&#39;elenco breweries, interpellando a sua volta l'endpoint API pubblico <a href="https://api.openbrewerydb.org/v1/breweries">https://api.openbrewerydb.org/v1/breweries</a> e restituendone l'output.</li>
         <li>Parametri:<ul>
             <li><code>page</code>. Opzionale. Determina a quale &quot;pagina&quot; dell&#39;elenco breweries si desidera accedere. Se non specificato viene assunto pari a 1.</li>
         </ul>
